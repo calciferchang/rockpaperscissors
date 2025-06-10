@@ -23,10 +23,12 @@ function getHumanChoice() {
   return humanChoice.toLowerCase();
 }
 
-// create variables for human and computer score
+// declare variables for human and computer score
 // have them both start at 0 at the start of the game
-var humanScore = 0;
-var computerScore = 0;
+let humanScore = 0;
+let computerScore = 0;
+
+let roundResult;
 
 // define the playRound function
 // 1. make sure that it is not a tie
@@ -34,14 +36,13 @@ var computerScore = 0;
 // 3. figure out if it is a win or loss
 // 4. return a message on the result
 function playRound(humanChoice, computerChoice) {
-  let roundResult;
   if (humanChoice === computerChoice) {
     roundResult = "tie"
   } else {
     const outcomes = {
-      rock:     { scissors: "win", paper: "lose" },
-      paper:    { rock: "win", scissors: "lose" },
-      scissors: { paper: "win", rock: "lose" },
+      rock:     { scissors: "win", paper: "loss" },
+      paper:    { rock: "win", scissors: "loss" },
+      scissors: { paper: "win", rock: "loss" },
     };
     roundResult = outcomes[humanChoice][computerChoice];
   }
@@ -51,23 +52,44 @@ function playRound(humanChoice, computerChoice) {
   if (roundResult === "win") {
     humanScore++;
   }
-  if (roundResult === "lose") {
+  if (roundResult === "loss") {
     computerScore++;
   }
 
   // generate message based on roundResult (if win, print win message, etc.)
   const messages = {
     win: "you won! " + humanChoice + " beats " + computerChoice + ".",
-    lose: "you lost :( " + humanChoice + " loses to " + computerChoice + ".",
+    loss: "you lost :( " + humanChoice + " loses to " + computerChoice + ".",
     tie: "you tied! you both played " + humanChoice + ".",
   };
   let roundResultMessage = messages[roundResult];
-  return roundResultMessage;
+  console.log(roundResultMessage)
+  return roundResult;
 }
 
-// create variables for the human and computer selections that run their functions to get inputs.
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
+function playGame(x) {
 
-//start the round with the selections as arguments
-playRound(humanSelection, computerSelection)
+  // have scores both start at 0 at the start of the game
+  humanScore = 0;
+  computerScore = 0;
+
+  for (let i = 0; i < x; i++ ) {
+    // create variables for the human and computer selections that run their functions to get inputs.
+    const humanSelection = getHumanChoice();
+    const computerSelection = getComputerChoice();
+
+    //start the round with the selections as arguments
+    playRound(humanSelection, computerSelection)
+  }
+
+  //game end
+  console.log(`Final score: Human ${humanScore} - Computer ${computerScore}`);
+
+  if (humanScore > computerScore) {
+    console.log("You won the game!");
+  } else if (computerScore > humanScore) {
+    console.log("You lost the game.");
+  } else {
+    console.log("The game is a tie.");
+  }
+}
